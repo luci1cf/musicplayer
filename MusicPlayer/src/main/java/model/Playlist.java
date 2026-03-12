@@ -7,7 +7,7 @@ public class Playlist {
     private int playlistId;
     private String playlistName;
     private List<Song> playlistSongs = new ArrayList<>();
-    private String playlistDuration;    // duration of the playlist in second; later on converted to mins and # of playlists
+    private int playlistDuration;    // duration of the playlist in second; later on converted to mins and # of playlists
 
     public Playlist(int playlistId, String playlistName) {
         this.playlistId = playlistId;
@@ -34,7 +34,17 @@ public class Playlist {
         return playlistSongs;
     }
 
-    public String getPlaylistDuration() {
+    public int getPlaylistDuration() {
         return playlistDuration;
+    }
+
+    @Override
+    public String toString() {
+        return "Playlist [" +
+                "playlistId: " + playlistId +
+                ", playlistName: '" + playlistName + '\'' +
+                ", playlistSongs: " + playlistSongs +
+                ", playlistDuration: " + playlistDuration + '\'' +
+                ']';
     }
 }

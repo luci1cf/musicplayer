@@ -45,4 +45,14 @@ public class Artist {
     public List<Album> getAlbums() {
         return albums;
     }
+
+    @Override
+    public String toString() {
+        return "Artist [" +
+                "artistId: " + artistId +
+                ", artistName: '" + artistName + '\'' +
+                ", songs: " + songs +
+                ", albums: " + albums +
+                '}';
+    }
 }

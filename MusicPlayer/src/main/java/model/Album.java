@@ -58,4 +58,16 @@ public class Album {
     public int getAlbumDuration() {
         return albumDuration;
     }
+
+    @Override
+    public String toString() {
+        return "Album [" +
+                "albumId:" + albumId +
+                ", albumName: '" + albumName + '\'' +
+                ", artist: '" + artist + '\'' +
+                ", releaseDate: " + releaseDate +
+                ", albumSongs: " + albumSongs +
+                ", albumDuration: " + albumDuration +
+                '}';
+    }
 }
