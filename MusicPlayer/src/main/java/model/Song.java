@@ -44,4 +44,14 @@ public class Song {
     public int getDuration() {
         return duration;
     }
+
+    @Override
+    public String toString() {
+        return "Song [" +
+                "songId: '" + songId +
+                "', title: '" + title + '\'' +
+                ", artist: '" + artist + '\'' +
+                ", duration: " + duration +
+                ']';
+    }
 }
