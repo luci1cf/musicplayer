@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Artist {
     private int artistId;
-    private String name;
+    private String artistName;
     private List<Song> songs = new ArrayList<>();
     private List<Album> albums = new ArrayList<>();
 
-    public Artist(int artistId, String name) {
+    public Artist(int artistId, String artistName) {
         this.artistId = artistId;
-        this.name = name;
+        this.artistName = artistName;
     }
 
     public void addSong(Song song) {
@@ -30,12 +30,12 @@ public class Artist {
         this.artistId = artistId;
     }
 
-    public String getName() {
-        return name;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
     public List<Song> getSongs() {
