@@ -6,14 +6,20 @@ import java.util.List;
 public class Artist {
     private int artistId;
     private String name;
-    private List<Song> songs;
-    private List<Album> albums;
+    private List<Song> songs = new ArrayList<>();
+    private List<Album> albums = new ArrayList<>();
 
-    public Artist(int artistId, String name, List<Song> songs, List<Album> albums) {
+    public Artist(int artistId, String name) {
         this.artistId = artistId;
         this.name = name;
-        this.songs = new ArrayList<>();
-        this.albums = new ArrayList<>();
+    }
+
+    public void addSong(Song song) {
+        songs.add(song);
+    }
+
+    public void addAlbum(Album album) {
+        albums.add(album);
     }
 
     public int getArtistId() {
