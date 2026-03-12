@@ -15,4 +15,28 @@ public class Artist {
         this.songs = new ArrayList<>();
         this.albums = new ArrayList<>();
     }
+
+    public int getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(int artistId) {
+        this.artistId = artistId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
 }
