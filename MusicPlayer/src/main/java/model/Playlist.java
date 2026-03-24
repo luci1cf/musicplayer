@@ -38,10 +38,14 @@ public class Playlist {
         return playlistDuration;
     }
 
-    public String getFormattedDuration() {
+    public String getFormattedPlaylistDuration() {
         int minutes = playlistDuration / 60;
         int seconds = playlistDuration % 60;
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    public int getSongCount() {
+        return playlistSongs.size();
     }
 
     public void addSong(Song song) {
@@ -68,7 +72,8 @@ public class Playlist {
                 "playlistId: " + playlistId +
                 ", playlistName: '" + playlistName + '\'' +
                 ", playlistSongs: " + playlistSongs +
-                ", playlistDuration: " + playlistDuration + '\'' +
+                ", playlistDuration: " + getFormattedPlaylistDuration() +
+                ", numberOfSongs: " + getSongCount() +
                 ']';
     }
 }
