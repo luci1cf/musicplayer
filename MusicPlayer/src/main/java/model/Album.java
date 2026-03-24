@@ -59,6 +59,10 @@ public class Album {
         return albumDuration;
     }
 
+    public int getAlbumSongCount() {
+        return albumSongs.size();
+    }
+
     @Override
     public String toString() {
         return "Album [" +
@@ -68,6 +72,7 @@ public class Album {
                 ", releaseDate: " + releaseDate +
                 ", albumSongs: " + albumSongs +
                 ", albumDuration: " + albumDuration +
+                ", albumSongCount" + getAlbumSongCount() +
                 '}';
     }
 }
