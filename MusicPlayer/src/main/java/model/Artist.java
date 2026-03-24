@@ -15,11 +15,21 @@ public class Artist {
     }
 
     public void addSong(Song song) {
-        songs.add(song);
+        if (!songs.contains(song)){
+            songs.add(song);
+            System.out.printf("Song %s added successfully.", song);
+        } else {
+            System.out.printf("Song %s by %s already exists.", song, artistName);
+        }
     }
 
     public void addAlbum(Album album) {
-        albums.add(album);
+        if (!albums.contains(album)){
+            albums.add(album);
+            System.out.printf("Album %s added successfully.", album);
+        } else {
+            System.out.printf("Album %s by %s already exists.", album, artistName);
+        }
     }
 
     public void removeSong(Song song) {
@@ -27,7 +37,7 @@ public class Artist {
             songs.remove(song);
             System.out.printf("Song %s successfully removed.", song);
         } else {
-            System.out.printf("Song %s does not exist.", song);
+            System.out.printf("Song %s by %s does not exist.", song, artistName);
         }
     }
 
@@ -36,7 +46,7 @@ public class Artist {
             albums.remove(album);
             System.out.printf("Album %s successfully removed.", album);
         } else {
-            System.out.printf("Album %s does not exist.", album);
+            System.out.printf("Album %s by %s does not exist.", album, artistName);
         }
     }
 
