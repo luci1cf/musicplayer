@@ -1,5 +1,6 @@
 package ctrl;
 
+import java.sql.Connection;
 import java.util.Properties;
 
 public class ConnectionFactory {
@@ -13,4 +14,10 @@ public class ConnectionFactory {
     private final static String user = prop.getProperty("DB_User", "...");
     private final static String passwd = prop.getProperty("DB_Passwd", "...");
     */
+
+    // Singleton instance (ensures constructor is called only once)
+    private static ConnectionFactory instance = new ConnectionFactory();
+
+    // Single shared database connection
+    private static Connection con;
 }
