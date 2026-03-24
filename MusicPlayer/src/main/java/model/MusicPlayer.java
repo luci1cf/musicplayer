@@ -1,12 +1,26 @@
 package model;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class MusicPlayer {
     private List<Song> queue;
 
     public void addSongToQueue(Song song) {
+        if (queue.contains(song)) {
+            Scanner input = new Scanner(System.in);
+            System.out.print("This song is already in your queue. Add again? (y/n): ");
+
+            String choice = input.nextLine();
+
+            if (!choice.equalsIgnoreCase("n")) {
+                System.out.println("Song was not added.");
+                return;
+            }
+        }
+
         queue.add(song);
+        System.out.println("Song added to queue.");
     }
 
     public void removeSongFromQueue(Song song) {
