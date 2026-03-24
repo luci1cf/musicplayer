@@ -45,13 +45,19 @@ public class Song {
         return duration;
     }
 
+    public String getFormattedDuration() {
+        int minutes = duration / 60;
+        int seconds = duration % 60;
+        return String.format("%d:%02d", minutes, seconds);
+    }
+
     @Override
     public String toString() {
         return "Song [" +
                 "songId: '" + songId +
                 "', title: '" + title + '\'' +
                 ", artist: '" + artist + '\'' +
-                ", duration: " + duration +
+                ", duration: " + getFormattedDuration() +
                 ']';
     }
 }
