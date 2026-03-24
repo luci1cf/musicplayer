@@ -36,4 +36,10 @@ public class ConnectionFactory {
         }
     }
 
+    /*
+        Returns the single database connection instance
+     */
+    public static Connection getInstance() {
+        return con;
+    }
 }
