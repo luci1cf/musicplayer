@@ -44,6 +44,24 @@ public class Playlist {
         return String.format("%d:%02d", minutes, seconds);
     }
 
+    public void addSong(Song song) {
+        if (!playlistSongs.contains(song)) {
+            playlistSongs.add(song);
+            playlistDuration += song.getDuration();
+        } else {
+            System.out.printf("%s is already in your playlist.", song);
+        }
+    }
+
+    public void removeSong(Song song) {
+        if (playlistSongs.contains(song)) {
+            playlistSongs.remove(song);
+            playlistDuration -= song.getDuration();
+        } else {
+            System.out.printf("Could not find %s in this playlist.", song);
+        }
+    }
+
     @Override
     public String toString() {
         return "Playlist [" +
