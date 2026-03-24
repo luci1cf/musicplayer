@@ -38,6 +38,12 @@ public class Playlist {
         return playlistDuration;
     }
 
+    public String getFormattedDuration() {
+        int minutes = playlistDuration / 60;
+        int seconds = playlistDuration % 60;
+        return String.format("%d:%02d", minutes, seconds);
+    }
+
     @Override
     public String toString() {
         return "Playlist [" +
