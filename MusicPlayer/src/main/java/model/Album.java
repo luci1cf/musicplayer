@@ -7,12 +7,12 @@ import java.util.List;
 public class Album {
     private int albumId;
     private String albumName;
-    private String artist;
+    private Artist artist;
     private LocalDate releaseDate;
     private List<Song> albumSongs = new ArrayList<>();
     private int albumDuration;  // duration of the playlist in second; later on converted to mins and # of playlists
 
-    public Album(int albumId, String albumName, String artist, LocalDate releaseDate) {
+    public Album(int albumId, String albumName, Artist artist, LocalDate releaseDate) {
         this.albumId = albumId;
         this.albumName = albumName;
         this.artist = artist;
@@ -35,11 +35,11 @@ public class Album {
         this.albumName = albumName;
     }
 
-    public String getArtist() {
+    public Artist getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(Artist artist) {
         this.artist = artist;
     }
 
@@ -59,6 +59,12 @@ public class Album {
         return albumDuration;
     }
 
+    public String getFormattedAlbumDuration() {
+        int hours = albumDuration / 3600;
+        int minutes = (albumDuration % 3600) / 60;
+        return String.format("%d:%02d", hours, minutes);
+    }
+
     public int getAlbumSongCount() {
         return albumSongs.size();
     }
@@ -71,7 +77,7 @@ public class Album {
                 ", artist: '" + artist + '\'' +
                 ", releaseDate: " + releaseDate +
                 ", albumSongs: " + albumSongs +
-                ", albumDuration: " + albumDuration +
+                ", albumDuration: " + getFormattedAlbumDuration() +
                 ", albumSongCount" + getAlbumSongCount() +
                 '}';
     }
