@@ -13,7 +13,7 @@ public class MusicPlayer {
 
             String choice = input.nextLine();
 
-            if (!choice.equalsIgnoreCase("n")) {
+            if (!choice.equalsIgnoreCase("y")) {
                 System.out.println("Song was not added.");
                 return;
             }
