@@ -22,6 +22,24 @@ public class Artist {
         albums.add(album);
     }
 
+    public void removeSong(Song song) {
+        if (!songs.contains(song)) {
+            songs.remove(song);
+            System.out.printf("Song %s successfully removed.", song);
+        } else {
+            System.out.printf("Song %s does not exist.", song);
+        }
+    }
+
+    public void removeAlbum(Album album) {
+        if (!albums.contains(album)) {
+            albums.remove(album);
+            System.out.printf("Album %s successfully removed.", album);
+        } else {
+            System.out.printf("Album %s does not exist.", album);
+        }
+    }
+
     public int getArtistId() {
         return artistId;
     }
