@@ -68,4 +68,29 @@ public class MusicPlayer {
             System.out.printf("The song %s by %s is not in the queue.%n", song.getTitle(), song.getArtist());
         }
     }
+
+    public void play() {
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        if (currentSong == null) {
+            currentIndex = 0;
+            currentSong = queue.get(currentIndex);
+        }
+
+        isPlaying = true;
+        System.out.printf("Now playing: %s by %s%n", currentSong.getTitle(), currentSong.getArtist());
+    }
+
+    public void pause() {
+        if (!isPlaying) {
+            System.out.println("No song is currently playing.");
+            return;
+        }
+
+        isPlaying = false;
+        System.out.println("Playback paused.");
+    }
 }
