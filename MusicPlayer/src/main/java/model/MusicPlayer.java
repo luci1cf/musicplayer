@@ -93,4 +93,38 @@ public class MusicPlayer {
         isPlaying = false;
         System.out.println("Playback paused.");
     }
+
+    public void playNext() {
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        if (currentIndex < queue.size() - 1) {
+            currentIndex++;
+            currentSong = queue.get(currentIndex);
+            isPlaying = true;
+
+            System.out.printf("Now playing: %s by %s%n", currentSong.getTitle(), currentSong.getArtist());
+        } else {
+            System.out.println("You are already at the last song in the queue.");
+        }
+    }
+
+    public void playLast() {
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        if (currentIndex > 0) {
+            currentIndex--;
+            currentSong = queue.get(currentIndex);
+            isPlaying = true;
+
+            System.out.printf("Now playing: %s by %s%n", currentSong.getTitle(), currentSong.getArtist());
+        } else {
+            System.out.println("You are already at the first song in the queue.");
+        }
+    }
 }
