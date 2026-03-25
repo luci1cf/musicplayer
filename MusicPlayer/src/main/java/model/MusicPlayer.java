@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class MusicPlayer {
     private List<Song> queue;
     private Song currentSong;
-    private int currentIndex;
+    private int currentIndex;       // position of the currentSong (the song which is playing)
     private boolean isPlaying;
 
     public MusicPlayer() {
@@ -52,9 +52,20 @@ public class MusicPlayer {
 
     public void removeSongFromQueue(Song song) {
         if (queue.contains(song)) {
+            int removedIndex = queue.indexOf(song);
             queue.remove(song);
+
+            if (removedIndex == currentIndex) {
+                currentSong = null;
+                isPlaying = false;
+                currentIndex = -1;
+            } else if (removedIndex < currentIndex) {
+                currentIndex--;
+            }
+
+            System.out.println("Song removed from queue.");
         } else {
-            System.out.printf("The song %s by %s is not in the queue.", song.getTitle(), song.getArtist());
+            System.out.printf("The song %s by %s is not in the queue.%n", song.getTitle(), song.getArtist());
         }
     }
 }
