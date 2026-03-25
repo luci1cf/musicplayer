@@ -31,10 +31,10 @@ public class UI {
 
             switch (choice) {
                 case "1":
-                    addSongMenu();
+                    // addSongMenu();
                     break;
                 case "2":
-                    removeSongMenu();
+                    // removeSongMenu();
                     break;
                 case "3":
                     player.showQueue();
