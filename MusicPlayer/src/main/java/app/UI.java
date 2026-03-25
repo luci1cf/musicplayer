@@ -21,4 +21,47 @@ public class UI {
         song2 = new Song(2, "Shape of You", "Ed Sheeran", 233);
         song3 = new Song(3, "Believer", "Imagine Dragons", 204);
     }
+
+    public void start() {
+        boolean running = true;
+
+        while (running) {
+            showMenu();
+            String choice = input.nextLine();
+
+            switch (choice) {
+                case "1":
+                    addSongMenu();
+                    break;
+                case "2":
+                    removeSongMenu();
+                    break;
+                case "3":
+                    player.showQueue();
+                    break;
+                case "4":
+                    player.play();
+                    break;
+                case "5":
+                    player.pause();
+                    break;
+                case "6":
+                    player.playNext();
+                    break;
+                case "7":
+                    player.playLast();
+                    break;
+                case "8":
+                    player.shuffle();
+                    break;
+                case "0":
+                    running = false;
+                    System.out.println("Music Player closed.");
+                    break;
+                default:
+                    System.out.println("Invalid input. Please try again.");
+            }
+        }
+        input.close();
+    }
 }
