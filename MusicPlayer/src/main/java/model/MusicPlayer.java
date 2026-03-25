@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,6 +9,29 @@ public class MusicPlayer {
     private Song currentSong;
     private int currentIndex;
     private boolean isPlaying;
+
+    public MusicPlayer() {
+        this.queue = new ArrayList<>();
+        this.currentSong = null;
+        this.currentIndex = -1;
+        this.isPlaying = false;
+    }
+
+    public List<Song> getQueue() {
+        return queue;
+    }
+
+    public Song getCurrentSong() {
+        return currentSong;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
 
     public void addSongToQueue(Song song) {
         if (queue.contains(song)) {
