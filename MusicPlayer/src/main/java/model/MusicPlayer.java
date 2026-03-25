@@ -127,4 +127,30 @@ public class MusicPlayer {
             System.out.println("You are already at the first song in the queue.");
         }
     }
+
+    public void shuffle() {
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        Collections.shuffle(queue);
+        currentIndex = 0;
+        currentSong = queue.get(currentIndex);
+
+        System.out.println("Queue shuffled.");
+    }
+
+    public void showQueue() {
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        System.out.println("Current queue:");
+        for (int i = 0; i < queue.size(); i++) {
+            Song song = queue.get(i);
+            System.out.printf("%d. %s by %s%n", i + 1, song.getTitle(), song.getArtist());
+        }
+    }
 }
