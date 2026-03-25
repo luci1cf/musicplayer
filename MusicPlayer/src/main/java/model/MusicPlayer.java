@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 public class MusicPlayer {
     private List<Song> queue;
+    private Song currentSong;
+    private int currentIndex;
+    private boolean isPlaying;
 
     public void addSongToQueue(Song song) {
         if (queue.contains(song)) {
