@@ -39,30 +39,24 @@ public class UI {
 
             switch (choice) {
                 case "1":
-                    addSongMenu();
+                    showQueueMenu();
                     break;
                 case "2":
-                    removeSongMenu();
-                    break;
-                case "3":
-                    player.showQueue();
-                    break;
-                case "4":
                     showPlaylistMenu();
                     break;
-                case "5":
+                case "3":
                     player.play();
                     break;
-                case "6":
+                case "4":
                     player.pause();
                     break;
-                case "7":
+                case "5":
                     player.playNext();
                     break;
-                case "8":
+                case "6":
                     player.playLast();
                     break;
-                case "9":
+                case "7":
                     player.shuffle();
                     break;
                 case "0":
@@ -78,15 +72,13 @@ public class UI {
 
     private void showMenu() {
         System.out.println("\n=== MUSIC PLAYER MENU ===");
-        System.out.print("1 - Add song to queue");
-        System.out.print("\t2 - Remove song from queue\n");
-        System.out.print("3 - Show queue");
-        System.out.print("\t4 - Create/manage playlist");
-        System.out.print("\t\t\t5 - Play\n");
-        System.out.print("6 - Pause");
-        System.out.println("\t\t\t\t7 - Next song");
-        System.out.print("8 - Previous song");
-        System.out.print("\t\t9 - Shuffle queue\n");
+        System.out.print("1 - Queue management");
+        System.out.print("\t2 - Playlist management\n");
+        System.out.print("3 - Play");
+        System.out.print("\t4 - Pause");
+        System.out.print("\t\t\t5 - Play next\n");
+        System.out.print("6 - Play last");
+        System.out.println("\t\t\t\t7 - Shuffle");
         System.out.println("0 - Exit");
         System.out.print("Choose an option: ");
     }
@@ -153,6 +145,28 @@ public class UI {
                 } else {
                     System.out.println("Playlist you are searching for does not exist.");
                 }
+                break;
+            default:
+                System.out.println("Invalid input.");
+                break;
+        }
+    }
+
+    private void showQueueMenu() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Do you want to add a song to the queue, remove a song from the queue or show the queue?");
+        System.out.println("(add/remove/show");
+        String choice = input.nextLine();
+
+        switch (choice) {
+            case "add":
+                addSongMenu();
+                break;
+            case "remove":
+                removeSongMenu();
+                break;
+            case "show":
+                player.showQueue();
                 break;
             default:
                 System.out.println("Invalid input.");
