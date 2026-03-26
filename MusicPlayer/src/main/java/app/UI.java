@@ -75,6 +75,15 @@ public class UI {
         }
     }
 
+    private void showPlaylists() {
+        System.out.println("=== PLAYLISTS ===");
+
+        int i = 0;
+        for (Playlist playlist : player.getPlaylists().values()) {
+            System.out.printf("%d: %s\n", i++, playlist.getPlaylistName());
+        }
+    }
+
     private void showPlaylistMenu() {
         boolean running = true;
 
@@ -87,7 +96,7 @@ public class UI {
 
             switch (choice) {
                 case "see":
-                    System.out.println(player.getPlaylists());
+                    showPlaylists();
                     break;
                 case "create":
                     System.out.println("Playlist name:");
@@ -99,6 +108,7 @@ public class UI {
                     break;
                 case "manage":
                     System.out.println("Which playlist do you want to manage");
+                    showPlaylists();
                     String chosenPlaylist = input.nextLine();
 
                     if (player.getPlaylists().containsKey(chosenPlaylist)) {
