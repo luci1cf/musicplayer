@@ -59,8 +59,8 @@ public class Playlist {
 
     public void removeSong(String songTitle) {
         if (playlistSongs.containsKey(songTitle)) {
-            playlistSongs.remove(songTitle);
             playlistDuration -= playlistSongs.get(songTitle).getDuration();
+            playlistSongs.remove(songTitle);
         } else {
             System.out.printf("Could not find %s in this playlist.", songTitle);
         }
