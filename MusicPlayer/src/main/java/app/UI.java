@@ -3,37 +3,30 @@ package app;
 import model.MusicPlayer;
 import model.Song;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class UI {
     private final Scanner input;
     private final MusicPlayer player;
-
-    private final Song song1;
-    private final Song song2;
-    private final Song song3;
-    private final Song song4;
-    private final Song song5;
-    private final Song song6;
-    private final Song song7;
-    private final Song song8;
-    private final Song song9;
-    private final Song song10;
+    private final List<Song> library;
 
     public UI() {
         input = new Scanner(System.in);
         player = new MusicPlayer();
+        library = new ArrayList<>();
 
-        song1 = new Song(1, "Blinding Lights", "The Weeknd", 200);
-        song2 = new Song(2, "Shape of You", "Ed Sheeran", 233);
-        song3 = new Song(3, "Believer", "Imagine Dragons", 204);
-        song4 = new Song(4, "Levitating", "Dua Lipa", 203);
-        song5 = new Song(5, "Stay", "The Kid LAROI", 141);
-        song6 = new Song(6, "Bad Guy", "Billie Eilish", 194);
-        song7 = new Song(7, "Sunflower", "Post Malone", 158);
-        song8 = new Song(8, "Someone You Loved", "Lewis Capaldi", 182);
-        song9 = new Song(9, "As It Was", "Harry Styles", 167);
-        song10 = new Song(10, "Heat Waves", "Glass Animals", 238);
+        library.add(new Song(1, "Blinding Lights", "The Weeknd", 200));
+        library.add(new Song(2, "Shape of You", "Ed Sheeran", 233));
+        library.add(new Song(3, "Believer", "Imagine Dragons", 204));
+        library.add(new Song(4, "Levitating", "Dua Lipa", 203));
+        library.add(new Song(5, "Stay", "The Kid LAROI", 141));
+        library.add(new Song(6, "Bad Guy", "Billie Eilish", 194));
+        library.add(new Song(7, "Sunflower", "Post Malone", 158));
+        library.add(new Song(8, "Someone You Loved", "Lewis Capaldi", 182));
+        library.add(new Song(9, "As It Was", "Harry Styles", 167));
+        library.add(new Song(10, "Heat Waves", "Glass Animals", 238));
     }
 
     public void start() {
@@ -93,51 +86,49 @@ public class UI {
         System.out.print("Choose an option: ");
     }
 
+    private void showLibrary() {
+        System.out.println("\n--- SONG LIBRARY---");
+        for (int i = 0; i < library.size(); i++) {
+            Song song = library.get(i);
+            System.out.printf("%d - %s by %s \n", i+1, song.getTitle(), song.getArtist());
+        }
+    }
+
     private void addSongMenu() {
-        System.out.println("Available songs:");
-        System.out.println("1 - Blinding Lights");
-        System.out.println("2 - Shape of You");
-        System.out.println("3 - Believer");
+        System.out.println("Which song do you want to add?");
+        showLibrary();
         System.out.print("Enter song number: ");
 
-        String addChoice = input.nextLine();
+        try {
+            int songNumber = Integer.parseInt(input.nextLine());
 
-        switch (addChoice) {
-            case "1":
-                player.addSongToQueue(song1);
-                break;
-            case "2":
-                player.addSongToQueue(song2);
-                break;
-            case "3":
-                player.addSongToQueue(song3);
-                break;
-            default:
+            if (songNumber >= 1 && songNumber <= library.size()) {
+                Song selectedSong = library.get(songNumber-1);
+                player.addSongToQueue(selectedSong);
+            } else {
                 System.out.println("Invalid song number.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Enter a valid number.");
         }
     }
 
     private void removeSongMenu() {
         System.out.println("Which song do you want to remove?");
-        System.out.println("1 - Blinding Lights");
-        System.out.println("2 - Shape of You");
-        System.out.println("3 - Believer");
+        player.showQueue();
         System.out.print("Enter song number: ");
 
-        String removeChoice = input.nextLine();
+        try {
+            int songNumber = Integer.parseInt(input.nextLine());
 
-        switch (removeChoice) {
-            case "1":
-                player.removeSongFromQueue(song1);
-                break;
-            case "2":
-                player.removeSongFromQueue(song2);
-                break;
-            case "3":
-                player.removeSongFromQueue(song3);
-                break;
-            default:
+            if (songNumber >= 1 && songNumber <= library.size()) {
+                Song selectedSong = library.get(songNumber-1);
+                player.removeSongFromQueue(selectedSong);
+            } else {
                 System.out.println("Invalid song number.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid number.");
         }
     }
 }
