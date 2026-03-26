@@ -80,9 +80,8 @@ public class UI {
     private void showPlaylists() {
         System.out.println("=== PLAYLISTS ===");
 
-        int i = 0;
         for (Playlist playlist : player.getPlaylists().values()) {
-            System.out.printf("%d: %s\n", i+1, playlist.getPlaylistName());
+            System.out.printf("%d: %s\n", playlist.getPlaylistId(), playlist.getPlaylistName());
         }
         System.out.println();
     }
@@ -91,8 +90,8 @@ public class UI {
         boolean running = true;
 
         while (running) {
-            System.out.println("Do you want to see all playlists, create a new playlist, manage a already existing one or exit the menu?");
-            System.out.println("(see/create/manage/exit)");
+            System.out.println("Do you want to see all playlists, create a new one, manage a already existing one, delete a playlist or exit?");
+            System.out.println("(see/create/manage/delete/exit)");
             String choice = input.nextLine();
             System.out.println();
 
@@ -194,6 +193,18 @@ public class UI {
                         System.out.println();
                     }
                     break;
+                case "delete":
+                    System.out.println("Which playlist do you want to delete?");
+                    showPlaylists();
+                    System.out.println("Playlist: ");
+                    String playlistToDelete = input.nextLine();
+                    System.out.println();
+
+                    if (player.getPlaylists().containsKey(playlistToDelete)) {
+                        player.getPlaylists().remove(playlistToDelete);
+                        System.out.printf("Playlist %s successfully deleted.\n", playlistToDelete);
+                    }
+                    break;
                 case "exit":
                     running = false;
                     System.out.println("Playlist menu closed");
@@ -212,7 +223,7 @@ public class UI {
 
         while (running) {
             System.out.println("Do you want to add a song to the queue, remove a song from the queue, show the queue or exit the menu?");
-            System.out.println("(add/remove/show/exit");
+            System.out.println("(add/remove/show/exit)");
             String choice = input.nextLine();
 
             switch (choice) {
