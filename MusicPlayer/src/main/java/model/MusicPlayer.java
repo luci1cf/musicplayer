@@ -1,18 +1,17 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class MusicPlayer {
     private List<Song> queue;
+    private Map<String, Playlist> playlists;
     private Song currentSong;
     private int currentIndex;       // position of the currentSong (the song which is playing)
     private boolean isPlaying;
 
     public MusicPlayer() {
         this.queue = new ArrayList<>();
+        this.playlists = new HashMap<>();
         this.currentSong = null;
         this.currentIndex = -1;
         this.isPlaying = false;
@@ -20,6 +19,10 @@ public class MusicPlayer {
 
     public List<Song> getQueue() {
         return queue;
+    }
+
+    public Map<String, Playlist> getPlaylists() {
+        return playlists;
     }
 
     public Song getCurrentSong() {
