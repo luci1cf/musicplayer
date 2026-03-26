@@ -4,10 +4,7 @@ import model.MusicPlayer;
 import model.Playlist;
 import model.Song;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class UI {
     private final Scanner input;
@@ -80,9 +77,13 @@ public class UI {
     private void showPlaylists() {
         System.out.println("=== PLAYLISTS ===");
 
-        for (Playlist playlist : player.getPlaylists().values()) {
-            System.out.printf("%d: %s\n", playlist.getPlaylistId(), playlist.getPlaylistName());
+        List<Playlist> playlists = new ArrayList<>(player.getPlaylists().values());
+        playlists.sort(Comparator.comparingInt(Playlist::getPlaylistId));
+
+        for (Playlist playlist : playlists) {
+            System.out.printf("%d: %s%n", playlist.getPlaylistId(), playlist.getPlaylistName());
         }
+
         System.out.println();
     }
 
