@@ -4,6 +4,7 @@ import model.MusicPlayer;
 import model.Playlist;
 import model.Song;
 
+import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,6 +37,7 @@ public class UI {
         while (running) {
             showMenu();
             String choice = input.nextLine();
+            System.out.println();
 
             switch (choice) {
                 case "1":
@@ -63,7 +65,7 @@ public class UI {
         System.out.print("1 - Queue management");
         System.out.print("\t2 - Playlist management\n");
         System.out.print("3 - Playback management");
-        System.out.println("0 - Exit");
+        System.out.println("\t0 - Exit");
         System.out.print("Choose an option: ");
     }
 
@@ -80,8 +82,9 @@ public class UI {
 
         int i = 0;
         for (Playlist playlist : player.getPlaylists().values()) {
-            System.out.printf("%d: %s\n", i++, playlist.getPlaylistName());
+            System.out.printf("%d: %s\n", i+1, playlist.getPlaylistName());
         }
+        System.out.println();
     }
 
     private void showPlaylistMenu() {
@@ -93,10 +96,12 @@ public class UI {
             System.out.println("Do you want to see all playlists, create a new playlist, manage a already existing one or exit the menu?");
             System.out.println("(see/create/manage/exit)");
             String choice = input.nextLine();
+            System.out.println();
 
             switch (choice) {
                 case "see":
                     showPlaylists();
+                    System.out.println();
                     break;
                 case "create":
                     System.out.println("Playlist name:");
@@ -104,50 +109,61 @@ public class UI {
                     Playlist newPlaylist = new Playlist(playlistCount, playlistName);
                     playlistCount++;
                     player.getPlaylists().put(playlistName, newPlaylist);
-                    System.out.printf("Playlist %s successfully created.", playlistName);
+                    System.out.printf("Playlist %s successfully created.\n", playlistName);
+                    System.out.println();
                     break;
                 case "manage":
-                    System.out.println("Which playlist do you want to manage");
+                    System.out.println("Which playlist do you want to manage?");
                     showPlaylists();
+                    System.out.println("Playlist: ");
                     String chosenPlaylist = input.nextLine();
+                    System.out.println();
 
                     if (player.getPlaylists().containsKey(chosenPlaylist)) {
                         System.out.println("Do you want to add or remove songs?");
                         System.out.println("(add/remove)");
                         String addOrRemove = input.nextLine();
+                        System.out.println();
 
                         if (addOrRemove.equalsIgnoreCase("add")) {
                             System.out.println("Which song do you want to add to the playlist?");
                             showLibrary();
                             int addSong = Integer.parseInt(input.nextLine());
+                            System.out.println();
 
                             if (addSong >= 1 && addSong <= library.size()) {
                                 Song selectedSong = library.get(addSong-1);
                                 player.getPlaylists().get(chosenPlaylist).addSong(selectedSong);
                             } else {
                                 System.out.println("Invalid song number.");
+                                System.out.println();
                             }
                         } else if (addOrRemove.equalsIgnoreCase("remove")) {
                             System.out.println("Which song do you want to remove from the playlist?");
                             List<Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
                             int removeSong = Integer.parseInt(input.nextLine());
+                            System.out.println();
 
                             if (removeSong >= 1 && removeSong <= playlistSongs.size()) {
                                 Song selectedSong = playlistSongs.get(removeSong-1);
                                 player.getPlaylists().get(chosenPlaylist).removeSong(selectedSong);
                             } else {
                                 System.out.println("Invalid song number.");
+                                System.out.println();
                             }
                         }
                     } else {
                         System.out.println("Playlist you are searching for does not exist.");
+                        System.out.println();
                     }
                     break;
                 case "exit":
                     running = false;
                     System.out.println("Playlist menu closed");
+                    System.out.println();
                 default:
                     System.out.println("Invalid input. Please try again.");
+                    System.out.println();
                     break;
             }
         }
