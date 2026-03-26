@@ -74,14 +74,14 @@ public class UI {
 
     private void showMenu() {
         System.out.println("\n=== MUSIC PLAYER MENU ===");
-        System.out.println("1 - Add song to queue");
-        System.out.println("2 - Remove song from queue");
-        System.out.println("3 - Show queue");
-        System.out.println("4 - Play");
-        System.out.println("5 - Pause");
-        System.out.println("6 - Next song");
-        System.out.println("7 - Previous song");
-        System.out.println("8 - Shuffle queue");
+        System.out.print("1 - Add song to queue");
+        System.out.print("\t2 - Remove song from queue\n");
+        System.out.print("3 - Show queue");
+        System.out.print("\t\t\t4 - Play\n");
+        System.out.print("5 - Pause");
+        System.out.println("\t\t\t\t6 - Next song");
+        System.out.print("7 - Previous song");
+        System.out.print("\t\t8 - Shuffle queue\n");
         System.out.println("0 - Exit");
         System.out.print("Choose an option: ");
     }
