@@ -102,4 +102,28 @@ public class UI {
                 System.out.println("Invalid song number.");
         }
     }
+
+    private void removeSongMenu() {
+        System.out.println("Which song do you want to remove?");
+        System.out.println("1 - Blinding Lights");
+        System.out.println("2 - Shape of You");
+        System.out.println("3 - Believer");
+        System.out.print("Enter song number: ");
+
+        String removeChoice = input.nextLine();
+
+        switch (removeChoice) {
+            case "1":
+                player.removeSongFromQueue(song1);
+                break;
+            case "2":
+                player.removeSongFromQueue(song2);
+                break;
+            case "3":
+                player.removeSongFromQueue(song3);
+                break;
+            default:
+                System.out.println("Invalid song number.");
+        }
+    }
 }
