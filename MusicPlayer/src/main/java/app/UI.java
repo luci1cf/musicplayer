@@ -161,6 +161,7 @@ public class UI {
                     running = false;
                     System.out.println("Playlist menu closed");
                     System.out.println();
+                    break;
                 default:
                     System.out.println("Invalid input. Please try again.");
                     System.out.println();
