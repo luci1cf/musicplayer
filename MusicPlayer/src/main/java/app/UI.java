@@ -45,19 +45,7 @@ public class UI {
                     showPlaylistMenu();
                     break;
                 case "3":
-                    player.play();
-                    break;
-                case "4":
-                    player.pause();
-                    break;
-                case "5":
-                    player.playNext();
-                    break;
-                case "6":
-                    player.playLast();
-                    break;
-                case "7":
-                    player.shuffle();
+                    showPlaybackMenu();
                     break;
                 case "0":
                     running = false;
@@ -74,11 +62,7 @@ public class UI {
         System.out.println("\n=== MUSIC PLAYER MENU ===");
         System.out.print("1 - Queue management");
         System.out.print("\t2 - Playlist management\n");
-        System.out.print("3 - Play");
-        System.out.print("\t4 - Pause");
-        System.out.print("\t\t\t5 - Play next\n");
-        System.out.print("6 - Play last");
-        System.out.println("\t\t\t\t7 - Shuffle");
+        System.out.print("3 - Playback management");
         System.out.println("0 - Exit");
         System.out.print("Choose an option: ");
     }
@@ -92,85 +76,143 @@ public class UI {
     }
 
     private void showPlaylistMenu() {
-        int playlistCount = 1;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Do you want to see all playlists, create a new playlist or manage a already existing one?");
-        System.out.println("(see/create/manage)");
-        String choice = input.nextLine();
+        boolean running = true;
 
-        switch (choice) {
-            case "see":
-                System.out.println(player.getPlaylists());
-                break;
-            case "create":
-                System.out.println("Playlist name:");
-                String playlistName = input.nextLine();
-                Playlist newPlaylist = new Playlist(playlistCount, playlistName);
-                playlistCount++;
-                player.getPlaylists().put(playlistName, newPlaylist);
-                System.out.printf("Playlist %s successfully created.", playlistName);
-                break;
-            case "manage":
-                System.out.println("Which playlist do you want to manage");
-                String chosenPlaylist = input.nextLine();
+        while (running) {
+            int playlistCount = 1;
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Do you want to see all playlists, create a new playlist, manage a already existing one or exit the menu?");
+            System.out.println("(see/create/manage/exit)");
+            String choice = input.nextLine();
 
-                if (player.getPlaylists().containsKey(chosenPlaylist)) {
-                    System.out.println("Do you want to add or remove songs?");
-                    System.out.println("(add/remove)");
-                    String addOrRemove = input.nextLine();
+            switch (choice) {
+                case "see":
+                    System.out.println(player.getPlaylists());
+                    break;
+                case "create":
+                    System.out.println("Playlist name:");
+                    String playlistName = input.nextLine();
+                    Playlist newPlaylist = new Playlist(playlistCount, playlistName);
+                    playlistCount++;
+                    player.getPlaylists().put(playlistName, newPlaylist);
+                    System.out.printf("Playlist %s successfully created.", playlistName);
+                    break;
+                case "manage":
+                    System.out.println("Which playlist do you want to manage");
+                    String chosenPlaylist = input.nextLine();
 
-                    if (addOrRemove.equalsIgnoreCase("add")) {
-                        System.out.println("Which song do you want to add to the playlist?");
-                        showLibrary();
-                        int addSong = Integer.parseInt(input.nextLine());
+                    if (player.getPlaylists().containsKey(chosenPlaylist)) {
+                        System.out.println("Do you want to add or remove songs?");
+                        System.out.println("(add/remove)");
+                        String addOrRemove = input.nextLine();
 
-                        if (addSong >= 1 && addSong <= library.size()) {
-                            Song selectedSong = library.get(addSong-1);
-                            player.getPlaylists().get(chosenPlaylist).addSong(selectedSong);
-                        } else {
-                            System.out.println("Invalid song number.");
+                        if (addOrRemove.equalsIgnoreCase("add")) {
+                            System.out.println("Which song do you want to add to the playlist?");
+                            showLibrary();
+                            int addSong = Integer.parseInt(input.nextLine());
+
+                            if (addSong >= 1 && addSong <= library.size()) {
+                                Song selectedSong = library.get(addSong-1);
+                                player.getPlaylists().get(chosenPlaylist).addSong(selectedSong);
+                            } else {
+                                System.out.println("Invalid song number.");
+                            }
+                        } else if (addOrRemove.equalsIgnoreCase("remove")) {
+                            System.out.println("Which song do you want to remove from the playlist?");
+                            List<Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
+                            int removeSong = Integer.parseInt(input.nextLine());
+
+                            if (removeSong >= 1 && removeSong <= playlistSongs.size()) {
+                                Song selectedSong = playlistSongs.get(removeSong-1);
+                                player.getPlaylists().get(chosenPlaylist).removeSong(selectedSong);
+                            } else {
+                                System.out.println("Invalid song number.");
+                            }
                         }
-                    } else if (addOrRemove.equalsIgnoreCase("remove")) {
-                        System.out.println("Which song do you want to remove from the playlist?");
-                        List<Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
-                        int removeSong = Integer.parseInt(input.nextLine());
-
-                        if (removeSong >= 1 && removeSong <= playlistSongs.size()) {
-                            Song selectedSong = playlistSongs.get(removeSong-1);
-                            player.getPlaylists().get(chosenPlaylist).removeSong(selectedSong);
-                        } else {
-                            System.out.println("Invalid song number.");
-                        }
+                    } else {
+                        System.out.println("Playlist you are searching for does not exist.");
                     }
-                } else {
-                    System.out.println("Playlist you are searching for does not exist.");
-                }
-                break;
-            default:
-                System.out.println("Invalid input.");
-                break;
+                    break;
+                case "exit":
+                    running = false;
+                    System.out.println("Playlist menu closed");
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
         }
     }
 
     private void showQueueMenu() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Do you want to add a song to the queue, remove a song from the queue or show the queue?");
-        System.out.println("(add/remove/show");
-        String choice = input.nextLine();
+        boolean running = true;
 
-        switch (choice) {
-            case "add":
-                addSongMenu();
-                break;
-            case "remove":
-                removeSongMenu();
-                break;
-            case "show":
-                player.showQueue();
-                break;
-            default:
-                System.out.println("Invalid input.");
-                break;
+        while (running) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Do you want to add a song to the queue, remove a song from the queue, show the queue or exit the menu?");
+            System.out.println("(add/remove/show/exit");
+            String choice = input.nextLine();
+
+            switch (choice) {
+                case "add":
+                    addSongMenu();
+                    break;
+                case "remove":
+                    removeSongMenu();
+                    break;
+                case "show":
+                    player.showQueue();
+                    break;
+                case "exit":
+                    running = false;
+                    System.out.println("Queue menu closed.");
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private void showPlaybackOptions() {
+        System.out.print("1 - Play");
+        System.out.print("\t2 - Pause\n");
+        System.out.print("3 - Play next song");
+        System.out.print("\t4 - Play previous song");
+        System.out.print("\t\t\t5 - Shuffle queue\n");
+        System.out.println("0 - Exit");
+        System.out.print("Choose an option: ");
+    }
+
+    private void showPlaybackMenu() {
+        boolean running = true;
+
+        while (running) {
+            System.out.println("=== PLAYBACK MENU ===");
+            showPlaybackOptions();
+            String choice = input.nextLine();
+
+            switch (choice) {
+                case "1":
+                    player.play();
+                    break;
+                case "2":
+                    player.pause();
+                    break;
+                case "3":
+                    player.playNext();
+                    break;
+                case "4":
+                    player.playLast();
+                    break;
+                case "5":
+                    player.shuffle();
+                    break;
+                case "0":
+                    running = false;
+                    System.out.println("Playback menu closed.");
+                    break;
+                default:
+                    System.out.println("Invalid input. Please try again.");
+            }
         }
     }
 
