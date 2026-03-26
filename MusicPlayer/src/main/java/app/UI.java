@@ -12,6 +12,13 @@ public class UI {
     private final Song song1;
     private final Song song2;
     private final Song song3;
+    private final Song song4;
+    private final Song song5;
+    private final Song song6;
+    private final Song song7;
+    private final Song song8;
+    private final Song song9;
+    private final Song song10;
 
     public UI() {
         input = new Scanner(System.in);
@@ -20,6 +27,13 @@ public class UI {
         song1 = new Song(1, "Blinding Lights", "The Weeknd", 200);
         song2 = new Song(2, "Shape of You", "Ed Sheeran", 233);
         song3 = new Song(3, "Believer", "Imagine Dragons", 204);
+        song4 = new Song(4, "Levitating", "Dua Lipa", 203);
+        song5 = new Song(5, "Stay", "The Kid LAROI", 141);
+        song6 = new Song(6, "Bad Guy", "Billie Eilish", 194);
+        song7 = new Song(7, "Sunflower", "Post Malone", 158);
+        song8 = new Song(8, "Someone You Loved", "Lewis Capaldi", 182);
+        song9 = new Song(9, "As It Was", "Harry Styles", 167);
+        song10 = new Song(10, "Heat Waves", "Glass Animals", 238);
     }
 
     public void start() {
@@ -31,10 +45,10 @@ public class UI {
 
             switch (choice) {
                 case "1":
-                    // addSongMenu();
+                    addSongMenu();
                     break;
                 case "2":
-                    // removeSongMenu();
+                    removeSongMenu();
                     break;
                 case "3":
                     player.showQueue();
