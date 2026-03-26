@@ -78,4 +78,28 @@ public class UI {
         System.out.println("0 - Exit");
         System.out.print("Choose an option: ");
     }
+
+    private void addSongMenu() {
+        System.out.println("Available songs:");
+        System.out.println("1 - Blinding Lights");
+        System.out.println("2 - Shape of You");
+        System.out.println("3 - Believer");
+        System.out.print("Enter song number: ");
+
+        String addChoice = input.nextLine();
+
+        switch (addChoice) {
+            case "1":
+                player.addSongToQueue(song1);
+                break;
+            case "2":
+                player.addSongToQueue(song2);
+                break;
+            case "3":
+                player.addSongToQueue(song3);
+                break;
+            default:
+                System.out.println("Invalid song number.");
+        }
+    }
 }
