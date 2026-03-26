@@ -1,12 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Playlist {
     private int playlistId;
     private String playlistName;
-    private List<Song> playlistSongs = new ArrayList<>();
+    private Map<String, Song> playlistSongs = new HashMap<>();
     private int playlistDuration;    // duration of the playlist in second; later on converted to mins and # of playlists
 
     public Playlist(int playlistId, String playlistName) {
@@ -30,7 +30,7 @@ public class Playlist {
         this.playlistName = playlistName;
     }
 
-    public List<Song> getPlaylistSongs() {
+    public Map<String,Song> getPlaylistSongs() {
         return playlistSongs;
     }
 
@@ -49,20 +49,20 @@ public class Playlist {
     }
 
     public void addSong(Song song) {
-        if (!playlistSongs.contains(song)) {
-            playlistSongs.add(song);
+        if (!playlistSongs.containsKey(song.getTitle())) {
+            playlistSongs.put(song.getTitle(), song);
             playlistDuration += song.getDuration();
         } else {
             System.out.printf("%s is already in your playlist.", song);
         }
     }
 
-    public void removeSong(Song song) {
-        if (playlistSongs.contains(song)) {
-            playlistSongs.remove(song);
-            playlistDuration -= song.getDuration();
+    public void removeSong(String songTitle) {
+        if (playlistSongs.containsKey(songTitle)) {
+            playlistSongs.remove(songTitle);
+            playlistDuration -= playlistSongs.get(songTitle).getDuration();
         } else {
-            System.out.printf("Could not find %s in this playlist.", song);
+            System.out.printf("Could not find %s in this playlist.", songTitle);
         }
     }
 

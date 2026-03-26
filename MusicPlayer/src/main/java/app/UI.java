@@ -4,9 +4,9 @@ import model.MusicPlayer;
 import model.Playlist;
 import model.Song;
 
-import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UI {
@@ -100,7 +100,7 @@ public class UI {
 
             switch (choice) {
                 case "see":
-                    showPlaylists();
+                    System.out.println(player.getPlaylists());
                     System.out.println();
                     break;
                 case "create":
@@ -140,13 +140,13 @@ public class UI {
                             }
                         } else if (addOrRemove.equalsIgnoreCase("remove")) {
                             System.out.println("Which song do you want to remove from the playlist?");
-                            List<Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
-                            int removeSong = Integer.parseInt(input.nextLine());
+                            Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
+                            String songToRemove = input.nextLine();
                             System.out.println();
 
-                            if (removeSong >= 1 && removeSong <= playlistSongs.size()) {
-                                Song selectedSong = playlistSongs.get(removeSong-1);
-                                player.getPlaylists().get(chosenPlaylist).removeSong(selectedSong);
+                            if (playlistSongs.containsKey(songToRemove)) {
+                                Song selectedSong = playlistSongs.get(songToRemove);
+                                player.getPlaylists().get(chosenPlaylist).removeSong(songToRemove);
                             } else {
                                 System.out.println("Invalid song number.");
                                 System.out.println();
