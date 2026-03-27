@@ -1,5 +1,6 @@
 package app;
 
+import ctrl.DAO;
 import model.MusicPlayer;
 import model.Playlist;
 import model.Song;
@@ -16,16 +17,11 @@ public class UI {
         player = new MusicPlayer();
         library = new ArrayList<>();
 
-        library.add(new Song(1, "Blinding Lights", "The Weeknd", 200));
-        library.add(new Song(2, "Shape of You", "Ed Sheeran", 233));
-        library.add(new Song(3, "Believer", "Imagine Dragons", 204));
-        library.add(new Song(4, "Levitating", "Dua Lipa", 203));
-        library.add(new Song(5, "Stay", "The Kid LAROI", 141));
-        library.add(new Song(6, "Bad Guy", "Billie Eilish", 194));
-        library.add(new Song(7, "Sunflower", "Post Malone", 158));
-        library.add(new Song(8, "Someone You Loved", "Lewis Capaldi", 182));
-        library.add(new Song(9, "As It Was", "Harry Styles", 167));
-        library.add(new Song(10, "Heat Waves", "Glass Animals", 238));
+        Map<String, Song> songsFromDb = DAO.getSongs();
+        library.addAll(songsFromDb.values());
+        library.sort(Comparator.comparingInt(Song::getSongId));
+
+        player.getPlaylists().putAll(DAO.getPlaylists(songsFromDb));
     }
 
     public void start() {
@@ -70,7 +66,7 @@ public class UI {
         System.out.println("\n--- SONG LIBRARY---");
         for (int i = 0; i < library.size(); i++) {
             Song song = library.get(i);
-            System.out.printf("%d - %s by %s \n", i+1, song.getTitle(), song.getArtist());
+            System.out.printf("%d - %s by %s \n", i + 1, song.getTitle(), song.getArtist());
         }
     }
 
@@ -98,8 +94,7 @@ public class UI {
 
             switch (choice) {
                 case "see":
-                    System.out.println(player.getPlaylists());
-                    System.out.println();
+                    showPlaylists();
                     break;
                 case "create":
                     System.out.println("Playlist name:");
@@ -113,9 +108,12 @@ public class UI {
                     int newId = player.getPlaylists().size() + 1;
                     Playlist newPlaylist = new Playlist(newId, playlistName);
                     player.getPlaylists().put(playlistName, newPlaylist);
+                    DAO.savePlaylist(newPlaylist);
+
                     System.out.printf("Playlist %s successfully created.%n", playlistName);
                     System.out.println();
                     break;
+
                 case "manage":
                     System.out.println("Which playlist do you want to manage?");
                     showPlaylists();
@@ -137,13 +135,16 @@ public class UI {
                                 System.out.println();
 
                                 if (addSong >= 1 && addSong <= library.size()) {
-                                    Song selectedSong = library.get(addSong-1);
-                                    player.getPlaylists().get(chosenPlaylist).addSong(selectedSong);
+                                    Song selectedSong = library.get(addSong - 1);
+                                    Playlist playlistToAddTo = player.getPlaylists().get(chosenPlaylist);
+                                    playlistToAddTo.addSong(selectedSong);
+                                    DAO.addSongToPlaylist(playlistToAddTo, selectedSong);
                                 } else {
                                     System.out.println("Invalid song number.");
                                     System.out.println();
                                 }
                                 break;
+
                             case "remove":
                                 System.out.println("Which song do you want to remove from the playlist?");
                                 Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
@@ -151,12 +152,15 @@ public class UI {
                                 System.out.println();
 
                                 if (playlistSongs.containsKey(songToRemove)) {
-                                    player.getPlaylists().get(chosenPlaylist).removeSong(songToRemove);
+                                    Playlist playlistToRemoveFrom = player.getPlaylists().get(chosenPlaylist);
+                                    playlistToRemoveFrom.removeSong(songToRemove);
+                                    DAO.removeSongFromPlaylist(playlistToRemoveFrom, songToRemove);
                                 } else {
                                     System.out.println("Invalid song number.");
                                     System.out.println();
                                 }
                                 break;
+
                             case "change":
                                 System.out.print("New name for the playlist: ");
                                 String newPlaylistName = input.nextLine();
@@ -178,12 +182,15 @@ public class UI {
                                     break;
                                 }
 
+                                DAO.updatePlaylistName(chosenPlaylist, newPlaylistName);
+
                                 playlist.setPlaylistName(newPlaylistName);
                                 playlists.put(newPlaylistName, playlist);
 
                                 System.out.println("Playlist name changed successfully.");
                                 System.out.println();
                                 break;
+
                             default:
                                 System.out.println("Invalid input.");
                                 System.out.println();
@@ -194,6 +201,7 @@ public class UI {
                         System.out.println();
                     }
                     break;
+
                 case "delete":
                     System.out.println("Which playlist do you want to delete?");
                     showPlaylists();
@@ -203,14 +211,17 @@ public class UI {
 
                     if (player.getPlaylists().containsKey(playlistToDelete)) {
                         player.getPlaylists().remove(playlistToDelete);
+                        DAO.deletePlaylist(playlistToDelete);
                         System.out.printf("Playlist %s successfully deleted.\n", playlistToDelete);
                     }
                     break;
+
                 case "exit":
                     running = false;
                     System.out.println("Playlist menu closed");
                     System.out.println();
                     break;
+
                 default:
                     System.out.println("Invalid input. Please try again.");
                     System.out.println();
@@ -240,6 +251,7 @@ public class UI {
                 case "exit":
                     running = false;
                     System.out.println("Queue menu closed.");
+                    break;
                 default:
                     System.out.println("Invalid input. Please try again.");
                     break;
@@ -300,7 +312,7 @@ public class UI {
             int songNumber = Integer.parseInt(input.nextLine());
 
             if (songNumber >= 1 && songNumber <= library.size()) {
-                Song selectedSong = library.get(songNumber-1);
+                Song selectedSong = library.get(songNumber - 1);
                 player.addSongToQueue(selectedSong);
             } else {
                 System.out.println("Invalid song number.");
@@ -319,7 +331,7 @@ public class UI {
             int songNumber = Integer.parseInt(input.nextLine());
 
             if (songNumber >= 1 && songNumber <= library.size()) {
-                Song selectedSong = library.get(songNumber-1);
+                Song selectedSong = library.get(songNumber - 1);
                 player.removeSongFromQueue(selectedSong);
             } else {
                 System.out.println("Invalid song number.");

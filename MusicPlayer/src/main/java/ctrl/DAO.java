@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DAO {
+
     public static HashMap<String, Song> getSongs() {
         HashMap<String, Song> songs = new HashMap<>();
 
@@ -68,8 +69,8 @@ public class DAO {
 
         try {
             PreparedStatement stmt = con.prepareStatement("""
-                    SELECT ps.playlist_id, ps.song_title
-                    FROM PlaylistSong ps
+                    SELECT playlist_id, song_title
+                    FROM PlaylistSong
                     """);
 
             ResultSet rs = stmt.executeQuery();
@@ -160,6 +161,44 @@ public class DAO {
 
                 stmt.executeUpdate();
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addSongToPlaylist(Playlist playlist, Song song) {
+        Connection con = ConnectionFactory.getInstance();
+
+        try {
+            PreparedStatement stmt = con.prepareStatement("""
+                    INSERT INTO PlaylistSong (playlist_id, song_title)
+                    VALUES (?, ?)
+                    """);
+
+            stmt.setInt(1, playlist.getPlaylistId());
+            stmt.setString(2, song.getTitle());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeSongFromPlaylist(Playlist playlist, String songTitle) {
+        Connection con = ConnectionFactory.getInstance();
+
+        try {
+            PreparedStatement stmt = con.prepareStatement("""
+                    DELETE FROM PlaylistSong
+                    WHERE playlist_id = ? AND song_title = ?
+                    """);
+
+            stmt.setInt(1, playlist.getPlaylistId());
+            stmt.setString(2, songTitle);
+
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
