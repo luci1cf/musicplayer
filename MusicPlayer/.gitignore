@@ -1,5 +1,4 @@
-src/main/java/ctrl/ConnectionFactory.java
-db.properties
+/src/main/java/ctrl/ConnectionFactory.java
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
