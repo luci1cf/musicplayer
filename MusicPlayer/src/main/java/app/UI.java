@@ -147,7 +147,9 @@ public class UI {
 
                             case "remove":
                                 System.out.println("Which song do you want to remove from the playlist?");
+                                showPlaylistSongs(chosenPlaylist);
                                 Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
+                                System.out.println("Song title: ");
                                 String songToRemove = input.nextLine();
                                 System.out.println();
 
@@ -155,8 +157,10 @@ public class UI {
                                     Playlist playlistToRemoveFrom = player.getPlaylists().get(chosenPlaylist);
                                     playlistToRemoveFrom.removeSong(songToRemove);
                                     DAO.removeSongFromPlaylist(playlistToRemoveFrom, songToRemove);
+                                    System.out.printf("Successfully removed %s from the playlist.", songToRemove);
+                                    System.out.println();
                                 } else {
-                                    System.out.println("Invalid song number.");
+                                    System.out.println("Invalid song name.");
                                     System.out.println();
                                 }
                                 break;
@@ -301,6 +305,35 @@ public class UI {
                     System.out.println("Invalid input. Please try again.");
             }
         }
+    }
+
+    private void showPlaylistSongs(String playlistName) {
+        Playlist playlist = player.getPlaylists().get(playlistName);
+
+        if (playlist == null) {
+            System.out.println("Playlist not found.");
+            System.out.println();
+            return;
+        }
+
+        if (playlist.getPlaylistSongs().isEmpty()) {
+            System.out.println("This playlist has no songs.");
+            System.out.println();
+            return;
+        }
+
+        System.out.println("=== SONGS IN PLAYLIST ===");
+
+        int counter = 1;
+        for (Song song : playlist.getPlaylistSongs().values()) {
+            System.out.printf("%d - %s by %s%n",
+                    counter,
+                    song.getTitle(),
+                    song.getArtist());
+            counter++;
+        }
+
+        System.out.println();
     }
 
     private void addSongMenu() {
