@@ -64,6 +64,30 @@ public class DAO {
         return playlists;
     }
 
+    public static boolean checkPlaylistName(String playlistName) {
+        boolean check = false;
+        Connection con = ConnectionFactory.getInstance();
+
+        try {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Playlist WHERE playlist_name = ?");
+            stmt.setString(1, playlistName);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("This playlist name is already in use.");
+                check = true;
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1) {
+                System.out.println("Playlist name already exists!");
+            }
+            throw new RuntimeException(e);
+        }
+
+        return check;
+    }
+
     private static void loadPlaylistSongs(Map<String, Playlist> playlists, Map<String, Song> songs) {
         Connection con = ConnectionFactory.getInstance();
 
@@ -130,12 +154,11 @@ public class DAO {
 
         try {
             PreparedStatement stmt = con.prepareStatement("""
-                    INSERT INTO Playlist (playlist_id, playlist_name)
-                    VALUES (?, ?)
-                    """);
+                INSERT INTO Playlist (playlist_id, playlist_name)
+                VALUES (playlist_seq.NEXTVAL, ?)
+            """);
 
-            stmt.setInt(1, playlist.getPlaylistId());
-            stmt.setString(2, playlist.getPlaylistName());
+            stmt.setString(1, playlist.getPlaylistName());
 
             stmt.executeUpdate();
 

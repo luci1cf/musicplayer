@@ -8,6 +8,7 @@ import model.Song;
 import java.util.*;
 
 public class UI {
+    // todo: überprüfung des Namens in der Datenbank, nicht auf der Client-Side
     private final Scanner input;
     private final MusicPlayer player;
     private final List<Song> library;
@@ -100,13 +101,12 @@ public class UI {
                     System.out.println("Playlist name:");
                     String playlistName = input.nextLine();
 
-                    while (player.getPlaylists().containsKey(playlistName)) {
+                    while (DAO.checkPlaylistName(playlistName)) {
                         System.out.println("This name is already taken. Please give another name:");
                         playlistName = input.nextLine();
                     }
 
-                    int newId = player.getPlaylists().size() + 1;
-                    Playlist newPlaylist = new Playlist(newId, playlistName);
+                    Playlist newPlaylist = new Playlist(0, playlistName);
                     player.getPlaylists().put(playlistName, newPlaylist);
                     DAO.savePlaylist(newPlaylist);
 
@@ -172,7 +172,7 @@ public class UI {
 
                                 Map<String, Playlist> playlists = player.getPlaylists();
 
-                                if (playlists.containsKey(newPlaylistName)) {
+                                if (DAO.checkPlaylistName(newPlaylistName)) {
                                     System.out.println("A playlist with this name already exists.");
                                     System.out.println();
                                     break;
