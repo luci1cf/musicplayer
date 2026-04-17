@@ -25,7 +25,7 @@ public class UI {
         player.getPlaylists().putAll(DAO.getPlaylists(songsFromDb));
     }
 
-    public void start() {
+    public void start() throws Exception {
         boolean running = true;
 
         while (running) {
@@ -84,7 +84,7 @@ public class UI {
         System.out.println();
     }
 
-    private void showPlaylistMenu() {
+    private void showPlaylistMenu() throws Exception {
         boolean running = true;
 
         while (running) {
@@ -98,20 +98,7 @@ public class UI {
                     showPlaylists();
                     break;
                 case "create":
-                    System.out.println("Playlist name:");
-                    String playlistName = input.nextLine();
-
-                    while (DAO.checkPlaylistName(playlistName)) {
-                        System.out.println("This name is already taken. Please give another name:");
-                        playlistName = input.nextLine();
-                    }
-
-                    Playlist newPlaylist = new Playlist(0, playlistName);
-                    player.getPlaylists().put(playlistName, newPlaylist);
-                    DAO.savePlaylist(newPlaylist);
-
-                    System.out.printf("Playlist %s successfully created.%n", playlistName);
-                    System.out.println();
+                    createPlaylist();
                     break;
 
                 case "manage":
@@ -129,70 +116,15 @@ public class UI {
 
                         switch (choice2) {
                             case "add":
-                                System.out.println("Which song do you want to add to the playlist?");
-                                showLibrary();
-                                int addSong = Integer.parseInt(input.nextLine());
-                                System.out.println();
-
-                                if (addSong >= 1 && addSong <= library.size()) {
-                                    Song selectedSong = library.get(addSong - 1);
-                                    Playlist playlistToAddTo = player.getPlaylists().get(chosenPlaylist);
-                                    playlistToAddTo.addSong(selectedSong);
-                                    DAO.addSongToPlaylist(playlistToAddTo, selectedSong);
-                                } else {
-                                    System.out.println("Invalid song number.");
-                                    System.out.println();
-                                }
+                                addSongToPlaylist(chosenPlaylist);
                                 break;
 
                             case "remove":
-                                System.out.println("Which song do you want to remove from the playlist?");
-                                showPlaylistSongs(chosenPlaylist);
-                                Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
-                                System.out.println("Song title: ");
-                                String songToRemove = input.nextLine();
-                                System.out.println();
-
-                                if (playlistSongs.containsKey(songToRemove)) {
-                                    Playlist playlistToRemoveFrom = player.getPlaylists().get(chosenPlaylist);
-                                    playlistToRemoveFrom.removeSong(songToRemove);
-                                    DAO.removeSongFromPlaylist(playlistToRemoveFrom, songToRemove);
-                                    System.out.printf("Successfully removed %s from the playlist.", songToRemove);
-                                    System.out.println();
-                                } else {
-                                    System.out.println("Invalid song name.");
-                                    System.out.println();
-                                }
+                                removeSongFromPlaylist(chosenPlaylist);
                                 break;
 
                             case "change":
-                                System.out.print("New name for the playlist: ");
-                                String newPlaylistName = input.nextLine();
-                                System.out.println();
-
-                                Map<String, Playlist> playlists = player.getPlaylists();
-
-                                if (DAO.checkPlaylistName(newPlaylistName)) {
-                                    System.out.println("A playlist with this name already exists.");
-                                    System.out.println();
-                                    break;
-                                }
-
-                                Playlist playlist = playlists.remove(chosenPlaylist);
-
-                                if (playlist == null) {
-                                    System.out.println("Playlist not found.");
-                                    System.out.println();
-                                    break;
-                                }
-
-                                DAO.updatePlaylistName(chosenPlaylist, newPlaylistName);
-
-                                playlist.setPlaylistName(newPlaylistName);
-                                playlists.put(newPlaylistName, playlist);
-
-                                System.out.println("Playlist name changed successfully.");
-                                System.out.println();
+                                changePlaylistName(chosenPlaylist);
                                 break;
 
                             default:
@@ -207,17 +139,7 @@ public class UI {
                     break;
 
                 case "delete":
-                    System.out.println("Which playlist do you want to delete?");
-                    showPlaylists();
-                    System.out.println("Playlist: ");
-                    String playlistToDelete = input.nextLine();
-                    System.out.println();
-
-                    if (player.getPlaylists().containsKey(playlistToDelete)) {
-                        player.getPlaylists().remove(playlistToDelete);
-                        DAO.deletePlaylist(playlistToDelete);
-                        System.out.printf("Playlist %s successfully deleted.\n", playlistToDelete);
-                    }
+                    deletePlaylist();
                     break;
 
                 case "exit":
@@ -231,6 +153,122 @@ public class UI {
                     System.out.println();
                     break;
             }
+        }
+    }
+
+    private void createPlaylist() {
+        String playlistName = newPlaylistNameInput();
+
+        while (DAO.checkPlaylistName(playlistName)) {
+            System.out.println("This name is already taken. Please give another name:");
+            playlistName = input.nextLine();
+        }
+
+        Playlist newPlaylist = new Playlist(0, playlistName);
+        player.getPlaylists().put(playlistName, newPlaylist);
+        DAO.savePlaylist(newPlaylist);
+
+        System.out.printf("Playlist %s successfully created.%n", playlistName);
+        System.out.println();
+    }
+
+
+    private void addSongToPlaylist(String chosenPlaylist) throws Exception {
+        int songToAdd = chooseSongToAdd();
+
+        if (songToAdd >= 1 && songToAdd <= library.size()) {
+            Song selectedSong = library.get(songToAdd - 1);
+            Playlist playlistToAddTo = player.getPlaylists().get(chosenPlaylist);
+            playlistToAddTo.addSong(selectedSong);
+            DAO.addSongToPlaylist(playlistToAddTo, selectedSong);
+        } else {
+            throw new Exception("Invalid song number.");
+        }
+    }
+
+    private int chooseSongToAdd() {
+        System.out.println("Which song do you want to add to the playlist?");
+        showLibrary();
+        int addSong = Integer.parseInt(input.nextLine());
+        System.out.println();
+
+        return addSong;
+    }
+
+    private void removeSongFromPlaylist(String chosenPlaylist) throws Exception {
+        Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
+        String songToRemove = chooseSongToRemove(chosenPlaylist);
+
+        if (playlistSongs.containsKey(songToRemove)) {
+            Playlist playlistToRemoveFrom = player.getPlaylists().get(chosenPlaylist);
+            playlistToRemoveFrom.removeSong(songToRemove);
+            DAO.removeSongFromPlaylist(playlistToRemoveFrom, songToRemove);
+            System.out.printf("Successfully removed %s from the playlist.", songToRemove);
+            System.out.println();
+        } else {
+            throw new Exception("Invalid song name.");
+        }
+    }
+
+    private String chooseSongToRemove(String playlist) {
+        System.out.println("Which song do you want to remove from the playlist?");
+        showPlaylistSongs(playlist);
+        System.out.println("Song title: ");
+        String removeSong = input.nextLine();
+        System.out.println();
+
+        return removeSong;
+    }
+
+    private void changePlaylistName(String chosenPlaylist) {
+        String newPlaylistName = newPlaylistNameInput();
+
+        Map<String, Playlist> playlists = player.getPlaylists();
+
+        if (DAO.checkPlaylistName(newPlaylistName)) {
+            System.out.println("A playlist with this name already exists.");
+            System.out.println();
+        }
+
+        updatePlaylistName(playlists, chosenPlaylist, newPlaylistName);
+
+        System.out.println("Playlist name changed successfully.");
+        System.out.println();
+    }
+
+    private String newPlaylistNameInput() {
+        System.out.print("New name for the playlist: ");
+        String newPlaylistName = input.nextLine();
+        System.out.println();
+
+        return newPlaylistName;
+    }
+
+    private void updatePlaylistName(Map<String, Playlist> playlists, String chosenPlaylist, String newName) {
+        Playlist playlist = playlists.remove(chosenPlaylist);
+
+        if (playlist == null) {
+            System.out.println("Playlist not found.");
+            System.out.println();
+        }
+
+        DAO.updatePlaylistName(chosenPlaylist, newName);
+
+        playlist.setPlaylistName(newName);
+        playlists.put(newName, playlist);
+    }
+
+    private void deletePlaylist() {
+        System.out.println("Which playlist do you want to delete?");
+        showPlaylists();
+        System.out.println("Playlist: ");
+        String playlistToDelete = input.nextLine();
+        System.out.println();
+
+        if (player.getPlaylists().containsKey(playlistToDelete)) {
+            player.getPlaylists().remove(playlistToDelete);
+            DAO.deletePlaylist(playlistToDelete);
+            System.out.printf("Playlist %s successfully deleted.\n", playlistToDelete);
         }
     }
 
