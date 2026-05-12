@@ -261,7 +261,6 @@ public class Tests {
 
         DAO.addSongToPlaylist(testPlaylist, testSong);
 
-        // Erst testSong in Playlist-Map des UI laden, dann entfernen
         try {
             buildUI(testSong.getTitle() + "\n").removeSongFromPlaylist(TEST_PLAYLIST);
         } catch (Exception e) {
