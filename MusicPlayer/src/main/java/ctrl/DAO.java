@@ -17,9 +17,10 @@ public class DAO {
 
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Song");
-            ResultSet rs = stmt.executeQuery();
+        try (
+                PreparedStatement stmt = con.prepareStatement("SELECT * FROM Song");
+                ResultSet rs = stmt.executeQuery()
+        ) {
 
             while (rs.next()) {
                 int songId = rs.getInt("song_id");
@@ -43,9 +44,10 @@ public class DAO {
 
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Playlist");
-            ResultSet rs = stmt.executeQuery();
+        try (
+                PreparedStatement stmt = con.prepareStatement("SELECT * FROM Playlist");
+                ResultSet rs = stmt.executeQuery()
+        ) {
 
             while (rs.next()) {
                 int playlistId = rs.getInt("playlist_id");
@@ -66,38 +68,48 @@ public class DAO {
 
     public static boolean checkPlaylistName(String playlistName) {
         boolean check = false;
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Playlist WHERE playlist_name = ?");
+        try (
+                PreparedStatement stmt = con.prepareStatement(
+                        "SELECT * FROM Playlist WHERE playlist_name = ?"
+                )
+        ) {
+
             stmt.setString(1, playlistName);
 
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
 
-            if (rs.next()) {
-                System.out.println("This playlist name is already in use.");
-                check = true;
+                if (rs.next()) {
+                    System.out.println("This playlist name is already in use.");
+                    check = true;
+                }
             }
+
         } catch (SQLException e) {
             if (e.getErrorCode() == 1) {
                 System.out.println("Playlist name already exists!");
             }
+
             throw new RuntimeException(e);
         }
 
         return check;
     }
 
-    private static void loadPlaylistSongs(Map<String, Playlist> playlists, Map<String, Song> songs) {
+    public static void loadPlaylistSongs(Map<String, Playlist> playlists, Map<String, Song> songs) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    SELECT playlist_id, song_title
-                    FROM PlaylistSong
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        SELECT playlist_id, song_title
+                        FROM PlaylistSong
+                        """);
 
-            ResultSet rs = stmt.executeQuery();
+                ResultSet rs = stmt.executeQuery()
+        ) {
 
             HashMap<Integer, Playlist> playlistById = getPlaylistIdMap(playlists);
 
@@ -118,7 +130,7 @@ public class DAO {
         }
     }
 
-    private static HashMap<Integer, Playlist> getPlaylistIdMap(Map<String, Playlist> playlists) {
+    public static HashMap<Integer, Playlist> getPlaylistIdMap(Map<String, Playlist> playlists) {
         HashMap<Integer, Playlist> playlistMap = new HashMap<>();
 
         for (Playlist playlist : playlists.values()) {
@@ -129,13 +141,15 @@ public class DAO {
     }
 
     public static void saveSong(Song song) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    INSERT INTO Song (song_id, title, artist, duration)
-                    VALUES (?, ?, ?, ?)
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        INSERT INTO Song (song_id, title, artist, duration)
+                        VALUES (?, ?, ?, ?)
+                        """)
+        ) {
 
             stmt.setInt(1, song.getSongId());
             stmt.setString(2, song.getTitle());
@@ -150,13 +164,15 @@ public class DAO {
     }
 
     public static void savePlaylist(Playlist playlist) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                INSERT INTO Playlist (playlist_id, playlist_name)
-                VALUES (playlist_seq.NEXTVAL, ?)
-            """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        INSERT INTO Playlist (playlist_id, playlist_name)
+                        VALUES (playlist_seq.NEXTVAL, ?)
+                        """)
+        ) {
 
             stmt.setString(1, playlist.getPlaylistName());
 
@@ -169,15 +185,18 @@ public class DAO {
         }
     }
 
-    private static void savePlaylistSongs(Playlist playlist) {
+    public static void savePlaylistSongs(Playlist playlist) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            for (Song song : playlist.getPlaylistSongs().values()) {
+        try (
                 PreparedStatement stmt = con.prepareStatement("""
                         INSERT INTO PlaylistSong (playlist_id, song_title)
                         VALUES (?, ?)
-                        """);
+                        """)
+        ) {
+
+            for (Song song : playlist.getPlaylistSongs().values()) {
 
                 stmt.setInt(1, playlist.getPlaylistId());
                 stmt.setString(2, song.getTitle());
@@ -191,13 +210,15 @@ public class DAO {
     }
 
     public static void addSongToPlaylist(Playlist playlist, Song song) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    INSERT INTO PlaylistSong (playlist_id, song_title)
-                    VALUES (?, ?)
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        INSERT INTO PlaylistSong (playlist_id, song_title)
+                        VALUES (?, ?)
+                        """)
+        ) {
 
             stmt.setInt(1, playlist.getPlaylistId());
             stmt.setString(2, song.getTitle());
@@ -210,13 +231,15 @@ public class DAO {
     }
 
     public static void removeSongFromPlaylist(Playlist playlist, String songTitle) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    DELETE FROM PlaylistSong
-                    WHERE playlist_id = ? AND song_title = ?
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        DELETE FROM PlaylistSong
+                        WHERE playlist_id = ? AND song_title = ?
+                        """)
+        ) {
 
             stmt.setInt(1, playlist.getPlaylistId());
             stmt.setString(2, songTitle);
@@ -229,15 +252,18 @@ public class DAO {
     }
 
     public static void deletePlaylist(String playlistName) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    DELETE FROM Playlist
-                    WHERE playlist_name = ?
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        DELETE FROM Playlist
+                        WHERE playlist_name = ?
+                        """)
+        ) {
 
             stmt.setString(1, playlistName);
+
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -246,14 +272,16 @@ public class DAO {
     }
 
     public static void updatePlaylistName(String oldName, String newName) {
+
         Connection con = ConnectionFactory.getInstance();
 
-        try {
-            PreparedStatement stmt = con.prepareStatement("""
-                    UPDATE Playlist
-                    SET playlist_name = ?
-                    WHERE playlist_name = ?
-                    """);
+        try (
+                PreparedStatement stmt = con.prepareStatement("""
+                        UPDATE Playlist
+                        SET playlist_name = ?
+                        WHERE playlist_name = ?
+                        """)
+        ) {
 
             stmt.setString(1, newName);
             stmt.setString(2, oldName);

@@ -9,9 +9,9 @@ import java.util.*;
 
 public class UI {
     // todo: überprüfung des Namens in der Datenbank, nicht auf der Client-Side
-    private final Scanner input;
-    private final MusicPlayer player;
-    private final List<Song> library;
+    public final Scanner input;
+    public final MusicPlayer player;
+    public final List<Song> library;
 
     public UI() {
         input = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class UI {
         input.close();
     }
 
-    private void showMenu() {
+    public void showMenu() {
         System.out.println("\n=== MUSIC PLAYER MENU ===");
         System.out.print("1 - Queue management");
         System.out.print("\t2 - Playlist management\n");
@@ -63,7 +63,7 @@ public class UI {
         System.out.print("Choose an option: ");
     }
 
-    private void showLibrary() {
+    public void showLibrary() {
         System.out.println("\n--- SONG LIBRARY---");
         for (int i = 0; i < library.size(); i++) {
             Song song = library.get(i);
@@ -71,7 +71,7 @@ public class UI {
         }
     }
 
-    private void showPlaylists() {
+    public void showPlaylists() {
         System.out.println("=== PLAYLISTS ===");
 
         List<Playlist> playlists = new ArrayList<>(player.getPlaylists().values());
@@ -84,7 +84,7 @@ public class UI {
         System.out.println();
     }
 
-    private void showPlaylistMenu() throws Exception {
+    public void showPlaylistMenu() throws Exception {
         boolean running = true;
 
         while (running) {
@@ -156,7 +156,7 @@ public class UI {
         }
     }
 
-    private void createPlaylist() {
+    public void createPlaylist() {
         String playlistName = newPlaylistNameInput();
 
         while (DAO.checkPlaylistName(playlistName)) {
@@ -173,7 +173,7 @@ public class UI {
     }
 
 
-    private void addSongToPlaylist(String chosenPlaylist) throws Exception {
+    public void addSongToPlaylist(String chosenPlaylist) throws Exception {
         int songToAdd = chooseSongToAdd();
 
         if (songToAdd >= 1 && songToAdd <= library.size()) {
@@ -186,7 +186,7 @@ public class UI {
         }
     }
 
-    private int chooseSongToAdd() {
+    public int chooseSongToAdd() {
         System.out.println("Which song do you want to add to the playlist?");
         showLibrary();
         int addSong = Integer.parseInt(input.nextLine());
@@ -195,7 +195,7 @@ public class UI {
         return addSong;
     }
 
-    private void removeSongFromPlaylist(String chosenPlaylist) throws Exception {
+    public void removeSongFromPlaylist(String chosenPlaylist) throws Exception {
         Map<String, Song> playlistSongs = player.getPlaylists().get(chosenPlaylist).getPlaylistSongs();
         String songToRemove = chooseSongToRemove(chosenPlaylist);
 
@@ -210,7 +210,7 @@ public class UI {
         }
     }
 
-    private String chooseSongToRemove(String playlist) {
+    public String chooseSongToRemove(String playlist) {
         System.out.println("Which song do you want to remove from the playlist?");
         showPlaylistSongs(playlist);
         System.out.println("Song title: ");
@@ -220,7 +220,7 @@ public class UI {
         return removeSong;
     }
 
-    private void changePlaylistName(String chosenPlaylist) {
+    public void changePlaylistName(String chosenPlaylist) {
         String newPlaylistName = newPlaylistNameInput();
 
         Map<String, Playlist> playlists = player.getPlaylists();
@@ -236,7 +236,7 @@ public class UI {
         System.out.println();
     }
 
-    private String newPlaylistNameInput() {
+    public String newPlaylistNameInput() {
         System.out.print("New name for the playlist: ");
         String newPlaylistName = input.nextLine();
         System.out.println();
@@ -244,7 +244,7 @@ public class UI {
         return newPlaylistName;
     }
 
-    private void updatePlaylistName(Map<String, Playlist> playlists, String chosenPlaylist, String newName) {
+    public void updatePlaylistName(Map<String, Playlist> playlists, String chosenPlaylist, String newName) {
         Playlist playlist = playlists.remove(chosenPlaylist);
 
         if (playlist == null) {
@@ -258,7 +258,7 @@ public class UI {
         playlists.put(newName, playlist);
     }
 
-    private void deletePlaylist() {
+    public void deletePlaylist() {
         System.out.println("Which playlist do you want to delete?");
         showPlaylists();
         System.out.println("Playlist: ");
@@ -272,7 +272,7 @@ public class UI {
         }
     }
 
-    private void showQueueMenu() {
+    public void showQueueMenu() {
         boolean running = true;
 
         while (running) {
@@ -301,7 +301,7 @@ public class UI {
         }
     }
 
-    private void showPlaybackOptions() {
+    public void showPlaybackOptions() {
         System.out.print("1 - Play");
         System.out.print("\t2 - Pause\n");
         System.out.print("3 - Play next song");
@@ -311,7 +311,7 @@ public class UI {
         System.out.print("Choose an option: ");
     }
 
-    private void showPlaybackMenu() {
+    public void showPlaybackMenu() {
         boolean running = true;
 
         while (running) {
@@ -345,7 +345,7 @@ public class UI {
         }
     }
 
-    private void showPlaylistSongs(String playlistName) {
+    public void showPlaylistSongs(String playlistName) {
         Playlist playlist = player.getPlaylists().get(playlistName);
 
         if (playlist == null) {
@@ -374,7 +374,7 @@ public class UI {
         System.out.println();
     }
 
-    private void addSongMenu() {
+    public void addSongMenu() {
         System.out.println("Which song do you want to add?");
         showLibrary();
         System.out.print("Enter song number: ");
@@ -393,7 +393,7 @@ public class UI {
         }
     }
 
-    private void removeSongMenu() {
+    public void removeSongMenu() {
         System.out.println("Which song do you want to remove?");
         player.showQueue();
         System.out.print("Enter song number: ");
